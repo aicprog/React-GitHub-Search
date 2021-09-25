@@ -1,7 +1,6 @@
-import userEvent from '@testing-library/user-event';
 import React from 'react';
 import styled from 'styled-components';
-import { GithubContext, useGlobalContext } from '../context/context';
+import {useGlobalContext } from '../context/context';
 import {Pie3D, Line2D, Bar3D, Doughnut2D } from './Charts';
 
 
@@ -10,7 +9,7 @@ const Repos = () => {
 
   let currentYear = new Date().getFullYear();
 
-  const { repos, commits, githubUser} = useGlobalContext();
+  const { repos, commits} = useGlobalContext();
 
 
 
@@ -104,7 +103,7 @@ const Repos = () => {
 		const { name, commits } = item;
     
 
-		//   //get commits by month for each project
+		//get commits by month for each project
 		let commitData = commits.reduce((total, item) => {
 			const { commit } = item;
   
@@ -116,15 +115,12 @@ const Repos = () => {
 
 			if (
 				year === currentYear) {
-				console.log("Hello");
 				total[day] = total[day]
 					? { value: total[day].value + 1 }
 					: (total[day] = { value: 1 });
 			}
 
-			// console.log(month, total[month])
 
-			// console.log(total);
 			return total;
 		}, {});
 
@@ -134,7 +130,7 @@ const Repos = () => {
 		}
 
 		//use months with commit data for mostCommits
-		//console.log(months);
+
 		total[name] = { seriesname: name, data: Object.values(months) };
    
 		return total;

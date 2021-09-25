@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { MdSearch } from 'react-icons/md';
-import { GithubContext, useGlobalContext } from '../context/context';
+import {useGlobalContext } from '../context/context';
 
 const Search = () => {
   const [user, setuser] = React.useState('')

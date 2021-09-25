@@ -1,5 +1,5 @@
 import React from 'react';
-import { GithubContext, useGlobalContext } from '../context/context';
+import {useGlobalContext } from '../context/context';
 import styled from 'styled-components';
 import { MdBusiness, MdLocationOn, MdLink } from 'react-icons/md';
 const Card = () => {
@@ -17,17 +17,19 @@ const Card = () => {
 				<a href={html_url}>follow</a>
 			</header>
 			<p className="bio">{bio}</p>
-			<div>
+			<div className="links">
 				<p>
-					<MdBusiness /> {company || 'Student'}
+					<MdBusiness /> {company || "Student"}
 				</p>
 				<p>
 					<MdLocationOn /> {location || "Earth"}
 				</p>
-				{blog && <a href={`https://${blog}`}>
-					<MdLink />
-					{blog}
-				</a>}
+				{blog && (
+					<a href={` https://${blog}`}>
+						<MdLink />
+						<span>{`  ${blog}`}</span>
+					</a>
+				)}
 			</div>
 		</Wrapper>
 	);};
@@ -79,6 +81,7 @@ const Wrapper = styled.article`
       letter-spacing: var(--spacing);
       transition: var(--transition);
       cursor: pointer;
+      text-decoration: none;
       &:hover {
         background: var(--clr-primary-5);
         color: var(--clr-white);
