@@ -11,8 +11,7 @@ const Repos = () => {
   let currentYear = new Date().getFullYear();
 
   const { repos, commits, githubUser} = useGlobalContext();
-  console.log("Commits")
-  console.log(commits)
+
 
 
 
@@ -114,8 +113,7 @@ const Repos = () => {
 
 			const year = date.getFullYear();
 			const day = getDayName(new Date(commit.author.date), "en-US");
-      console.log(githubUser.name.toLowerCase());
-      console.log(commit.author.name.toLowerCase());
+
 			if (
 				year === currentYear) {
 				console.log("Hello");

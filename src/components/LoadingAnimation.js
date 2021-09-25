@@ -4,14 +4,14 @@ import { useGlobalContext } from '../context/context';
 
 const LoadingAnimation = () => {
     return (
-        <Wrapper>
-            <div class="loader">
-                <div class="inner one"></div>
-                <div class="inner two"></div>
-                <div class="inner three"></div>
-            </div>
-        </Wrapper>
-	);
+			<Wrapper>
+				<div className="loader">
+					<div className="inner one"></div>
+					<div className="inner two"></div>
+					<div className="inner three"></div>
+				</div>
+			</Wrapper>
+		);
 }
 
 const Wrapper = styled.div`
