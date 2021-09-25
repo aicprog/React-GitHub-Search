@@ -56,62 +56,60 @@ const GithubProvider = ({children}) =>{
 	}
 
     //search users
-    const searchGithubUser = (user)=>{
+    const searchGithubUser = async (user)=>{
         //toggle Error
         toggleError();
         //set loading to true
         setLoading(true)
-		
-		
-        axios(`${rootUrl}/users/${user}`)
-        .then(({data})=>{
-					setGithubUser(data);
 
-					//reset commits to new data
-					//reset commit so it can get incoming data
-					setCommits([]);
+		const response = await axios(`${rootUrl}/users/${user}`).catch((error) =>{
+			console.log(error)
+		})
 
-					const { followers_url, repos_url } = data;
+		if(response){
+			setGithubUser(response.data);
+			//reset commit so it can get incoming data
+			setCommits([]);
+			const { followers_url, repos_url } = response.data;
 
-					//https://api.github.com/users/krishnaik06/repos?sort=created&order=desc&per_page=5
-					//repos
-					axios(`${repos_url}?sort=pushed&order=desc`).then(({ data }) => {
-						setRepos(data);
-						// console.log(`${repos_url}?sort=pushed&order=desc`);
 
-						//commitz
-						for (const index in data.slice(0, 3)) {
-							const { full_name, name } = data[index];
+			await Promise.allSettled([
+				axios(`${repos_url}?sort=pushed&order=desc`),
+				axios(`${followers_url}?per_page=100`),
+			]).then((results) =>{
+				console.log(results)
+				const [repos, followers] = results
+				const status = 'fulfilled'
 
-							const url = `${rootUrl}/repos/${full_name}/commits?since=${week}&per_page=100`;
-							console.log(url);
-							axios(`${url}`).then(({ data }) => {
-								// console.log(data);
-								setCommits((oldArray) => {
-									
-									return [...oldArray, { name, commits: data }];
-								});
-								// setCommits([...commits, { name, commits: data }]);
-								
-								
-								// }
+				if(repos.status === status){
+					let data = repos.value.data
+					setRepos(data);
+
+					//commitz
+					for (const index in data.slice(0, 3)) {
+						const { full_name, name } = data[index];
+
+						const url = `${rootUrl}/repos/${full_name}/commits?since=${week}&per_page=100`;
+						console.log(url);
+						axios(`${url}`).then(({ data }) => {
+							// console.log(data);
+							setCommits((oldArray) => {
+								return [...oldArray, { name, commits: data }];
 							});
-						}
-					});
+							// setCommits([...commits, { name, commits: data }]);
 
-					//followers
-					axios(`${followers_url}?per_page=100`).then(({ data }) => {
-						setFollowers(data);
-					});
-				})
-        .catch((error) =>{
-             console.log(error)
-             toggleError(true, "There is no user with that username")
-        })
-		checkRequests();
-		setLoading(false);
-        // console.log(user)
-		// console.log(commits);
+							// }
+						});
+					}
+				}
+
+				if(followers.status === status){
+					setFollowers(followers.value.data)
+				}
+			}).catch(error => console.log(error));
+		}else{
+			toggleError(true, "There is no user with that username");
+		}
 
     }
 
