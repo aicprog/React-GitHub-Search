@@ -19,7 +19,9 @@ const Search = () => {
 
   }
 
-
+      // <h3>
+			// 	requests: {requests.remaining} / {requests.limit}
+			// </h3>;
 
   return (
     <section className="section">
@@ -37,7 +39,6 @@ const Search = () => {
               {(requests.remaining > 0 && !loading) && <button  type="submit">search</button>}
           </div>
         </form>
-        <h3>requests: {requests.remaining} / {requests.limit}</h3>
       </Wrapper>
     </section>
   )
